@@ -29,13 +29,30 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 
+std_msgs::String::ConstPtr alpha = nullptr;
 /**
  * This tutorial demonstrates simple receipt of messages over the ROS system.
  */
 // %Tag(CALLBACK)%
 void chatterCallback(const std_msgs::String::ConstPtr& msg)
 {
-  ROS_INFO("I heard: [%s]", msg->data.c_str());
+  if (alpha == nullptr)
+  {
+    ROS_INFO("Global ConstPtr initialized");
+    ROS_INFO("I heard: [%s], Reference count = %ld ", msg->data.c_str(), msg.use_count());
+    alpha = msg;
+    return;
+  }
+
+  if (alpha == msg)
+  {
+    ROS_INFO("Pointer retained. I heard: [%s], Reference count = %ld ", msg->data.c_str(), msg.use_count());
+  }
+  else
+  {
+    ROS_INFO("New pointer created. I heard: [%s], Reference count = %ld ", msg->data.c_str(), msg.use_count());
+    ROS_INFO("Old pointer heard: [%s], Reference count = %ld", alpha->data.c_str(), alpha.use_count());
+  }
 }
 // %EndTag(CALLBACK)%
 
