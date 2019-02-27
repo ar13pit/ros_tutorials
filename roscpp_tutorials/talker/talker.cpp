@@ -27,6 +27,7 @@
 // %Tag(FULLTEXT)%
 // %Tag(ROS_HEADER)%
 #include "ros/ros.h"
+#include "ros/master.h"
 // %EndTag(ROS_HEADER)%
 // %Tag(MSG_HEADER)%
 #include "std_msgs/String.h"
@@ -93,7 +94,7 @@ int main(int argc, char **argv)
    */
 // %Tag(ROS_OK)%
   int count = 0;
-  while (ros::ok())
+  while (ros::ok() && ros::master::check())
   {
 // %EndTag(ROS_OK)%
     /**
