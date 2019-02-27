@@ -27,7 +27,9 @@
 
 // %Tag(FULLTEXT)%
 #include "ros/ros.h"
+#include "ros/callback_queue.h"
 #include "std_msgs/String.h"
+#include <iostream>
 
 std_msgs::String::ConstPtr alpha = nullptr;
 /**
@@ -36,6 +38,7 @@ std_msgs::String::ConstPtr alpha = nullptr;
 // %Tag(CALLBACK)%
 void chatterCallback(const std_msgs::String::ConstPtr& msg)
 {
+
   if (alpha == nullptr)
   {
     ROS_INFO("Global ConstPtr initialized");
@@ -102,8 +105,18 @@ int main(int argc, char **argv)
    * will exit when Ctrl-C is pressed, or the node is shutdown by the master.
    */
 // %Tag(SPIN)%
-  ros::spin();
-// %EndTag(SPIN)%
+  //ros::spin();
+  while (ros::ok() && ros::master::check())
+  {
+    ros::getGlobalCallbackQueue()->callAvailable(ros::WallDuration(0.1));
+  }// %EndTag(SPIN)%
+
+//  std::cout << "After ROS spin and before master check" << std::endl;
+//  while (ros::master::check());
+
+//  ros::shutdown();
+
+//  std::cout << "After ROS shutdown" << std::endl;
 
   return 0;
 }
