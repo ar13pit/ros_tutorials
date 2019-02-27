@@ -1,0 +1,3 @@
+<launch>
+  <node name="listener2" pkg="roscpp_tutorials" type="listener" output="screen"/>
+</launch>
