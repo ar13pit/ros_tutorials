@@ -1,0 +1,3 @@
+<launch>
+  <node name="talker_docker" pkg="roscpp_tutorials" type="start_docker_node.bash" output="screen"/>
+</launch>
