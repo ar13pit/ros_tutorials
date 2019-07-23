@@ -40,8 +40,9 @@ import rospy
 import os
 from std_msgs.msg import String
 
-def callback(data):
+def callback(data, rate):
     rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data.data)
+    rate.sleep()
 
 def listener():
     master = rospy.get_master()
@@ -52,8 +53,9 @@ def listener():
     # name for our 'listener' node so that multiple listeners can
     # run simultaneously.
     rospy.init_node('listener', anonymous=True)
+    rate = rospy.Rate(rospy.get_param("~rate")) # Hz
 
-    rospy.Subscriber('chatter', String, callback)
+    rospy.Subscriber('chatter', String, callback, rate, queue_size=1)
 
     # spin() simply keeps python from exiting until this node is stopped
     #rospy.spin()
